@@ -1,0 +1,17 @@
+{
+    "name": "qi/dionivan",
+    "description": "web 2",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "Src\\": "src/",
+            "Model\\":"src/model/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Dionivan"
+        }
+    ],
+    "require": {}
+}
