@@ -1,5 +1,6 @@
 <?php
 
+use Database\Database;
 use Model\Pedido;
 
 
@@ -38,7 +39,8 @@ $pedido = new Pedido();
             $pedido->entrega = null;
         }
 
-  
+  //criando a variavel para receber a lista de ingredientes
+  $listaItens = null;
 ?>
 
 <!DOCTYPE html>
@@ -48,15 +50,17 @@ $pedido = new Pedido();
     <title>Lista do pedido</title>
 </head>
 <body>
-        <?php echo date_default_timezone_set("America/Sao_Paulo") ?>
-        <?php echo "<br> Data e hora do pedido: " . date ("d / m / y - H : i : s")?>
 
     <?= $pedido->darDesconto() ?>
 
 
 
     <?php foreach($pedido->ingredientes as $i) : ?>
-        <h3 style="font-family:  courier;"> <?= $i ?> </h3>
+        <h3 style="font-family:  courier;"> 
+            <?php 
+                echo $i;
+                $listaItens .= $i . ', ';
+            ?> </h3>
         <hr>
     <?php endforeach ?>
     <h2>Qauntidade:</h2>
@@ -71,6 +75,19 @@ $pedido = new Pedido();
     <h2>Entrega:</h2>
     <h3 style="font-family:  courier;">
     <?= $pedido->entrega ?> <hr> </h3>
+
+    <?php
+    ///////////////////////////////////
+        require_once "../src/model/Database.php";
+        $db = new Database();
+        
+        $db-> insert(
+            "INSERT INTO pedidos(data_hora, ingredientes, qtde, pgto, entrega)
+            VALUES ('$pedido->dataHora' , '$listaItens' , '$pedido->qtde' , '$pedido->pgto' , '$pedido->entrega')"
+        );
+
+    ///////////////////////////////////
+    ?>
     
 </body>
 </html>

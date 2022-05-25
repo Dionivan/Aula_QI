@@ -1,4 +1,8 @@
 <?php
+
+use Database\Database;
+
+
  //Verificando se foi enviado via post o email
  if( isset($_POST['email']) ) {
      $email = $_POST['email']; //Caso sim, salvamos este email na variável $email
@@ -12,17 +16,43 @@
      $pass = null;
  }
 
+ /////////////////////////////////////////////////////////
+
+
+
+
+
+require_once "../src/model/Database.php";
+
+$db = new Database();
+
+$resultDb = $db->select(
+    "SELECT * FROM usuarios WHERE email = '$email';" 
+);
+
+//var_dump($result);
+
+if (isset($resultDb[0])) {
+    $emailDb = $resultDb [0]->email;
+    $senhaDb = $resultDb [0]->senha;
+}else{
+    $emailDb = null;
+    $senhaDb = null;
+}
+
+///////////////////////////////////////////////////////////
+
  //Se as variáveis $email e $pass forem diferentes de null, então será
  //realizada a verificação de email e senha
  if($email != null && $pass != null) {
-     if($email == 'paulo@ig.net' && $pass == '4321') {
-         $result = "Seja bem vindo!";
-         $redirect =
+     if($email == $emailDb && $pass == $senhaDb) {
+        // $result = "Seja bem vindo!";
+        // $redirect =
          "<meta http-equiv='refresh' content='2; url=https://www.youtube.com'/>";
      } else {
          $result = "Acesso negado!";
          $redirect =
-         "<meta http-equiv='refresh' content='2; url=../index.php' />";
+        "<meta http-equiv='refresh' content='2; url=../index.php' />";
      }
  }
 
@@ -33,7 +63,7 @@ require_once "../src/views/header_nav.php";
  <div class="container mt-3">
 
      <div class="text-center">
-         <h1><?= (isset($result) ? $result : "Visitante") ?></h1>
+         <h1></h1>
          <?= (isset($redirect) ? $redirect : "<hr>") ?>
      </div>
 
